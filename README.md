@@ -17,7 +17,7 @@ This guide explains how to deploy the Omni Dev platform as a standalone applicat
 ```bash
 mkdir -p /root/omnidev
 cd /root/omnidev
-git clone https://github.com/yourusername/omnidev.git .
+git clone https://github.com/drpcoa/omnidev.git .
 ```
 
 2. **Configure environment variables (optional)**

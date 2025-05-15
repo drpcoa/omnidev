@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OmniDev - Advanced AI Development Platform</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap">
+  <style>
+    :root {
+      --bg-dark: #030711;
+      --bg-card: #0a0f1f;
+      --text-primary: #f8fafc;
+      --text-secondary: #94a3b8;
+      --accent-blue: #3b82f6;
+      --accent-purple: #8b5cf6;
+      --accent-green: #10b981;
+      --accent-cyan: #06b6d4;
+      --border-glow: rgba(59, 130, 246, 0.3);
+      --neon-blue: #4facfe;
+      --neon-purple: #00f2fe;
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      background-color: var(--bg-dark);
+      color: var(--text-primary);
+      line-height: 1.6;
+      overflow-x: hidden;
+      background: linear-gradient(to bottom, #030711, #0a101d);
+      position: relative;
+    }
+    
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: 
+        radial-gradient(circle at 15% 25%, rgba(59, 130, 246, 0.12) 0%, transparent 30%),
+        radial-gradient(circle at 85% 65%, rgba(139, 92, 246, 0.08) 0%, transparent 25%),
+        radial-gradient(circle at 50% 50%, rgba(6, 182, 212, 0.05) 0%, transparent 50%);
+      pointer-events: none;
+      z-index: -1;
+    }
+    
+    /* Futuristic grid overlay */
+    body::after {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: 
+        linear-gradient(to right, rgba(59, 130, 246, 0.03) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(59, 130, 246, 0.03) 1px, transparent 1px);
+      background-size: 30px 30px;
+      pointer-events: none;
+      z-index: -1;
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+    
+    header {
+      padding: 24px 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      margin-bottom: 60px;
+    }
+    
+    .logo {
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700;
+      font-size: 24px;
+      color: var(--text-primary);
+      background: linear-gradient(90deg, var(--accent-blue), var(--accent-purple));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      letter-spacing: -0.5px;
+    }
+    
+    .nav-links {
+      display: flex;
+      gap: 32px;
+    }
+    
+    .nav-links a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+    
+    .nav-links a:hover {
+      color: var(--text-primary);
+    }
+    
+    .auth-buttons {
+      display: flex;
+      gap: 12px;
+    }
+    
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px 20px;
+      font-size: 14px;
+      font-weight: 500;
+      border-radius: 8px;
+      border: none;
+      outline: none;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-decoration: none;
+    }
+    
+    .primary {
+      background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+      color: white;
+      box-shadow: 0 4px 20px rgba(79, 70, 229, 0.2);
+    }
+    
+    .primary:hover {
+      box-shadow: 0 6px 24px rgba(79, 70, 229, 0.4);
+      transform: translateY(-1px);
+    }
+    
+    .secondary {
+      background-color: rgba(255, 255, 255, 0.05);
+      color: var(--text-primary);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .secondary:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+    
+    /* Hero section */
+    .hero {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 40px 0 80px;
+    }
+    
+    .hero h1 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(2.5rem, 5vw, 4.5rem);
+      font-weight: 700;
+      line-height: 1.2;
+      margin-bottom: 24px;
+      max-width: 900px;
+      background: linear-gradient(90deg, 
+        #ffffff 0%, 
+        var(--accent-blue) 50%, 
+        var(--accent-purple) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      letter-spacing: -1px;
+      position: relative;
+      overflow: visible;
+    }
+    
+    /* Glow effect on main heading */
+    .hero h1::after {
+      content: attr(data-text);
+      position: absolute;
+      left: 0;
+      top: 0;
+      z-index: -1;
+      background: linear-gradient(90deg, 
+        #ffffff 0%, 
+        var(--accent-blue) 50%, 
+        var(--accent-purple) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      filter: blur(12px);
+      opacity: 0.4;
+    }
+    
+    .hero p {
+      font-size: clamp(1rem, 2vw, 1.25rem);
+      color: var(--text-secondary);
+      max-width: 700px;
+      margin-bottom: 40px;
+      position: relative;
+      z-index: 1;
+    }
+    
+    .hero-buttons {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 64px;
+      position: relative;
+      z-index: 2;
+    }
+    
+    .hero-img {
+      position: relative;
+      width: 100%;
+      max-width: 1000px;
+      overflow: hidden;
+      border-radius: 16px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      margin-bottom: 80px;
+      padding: 3px;
+      background: linear-gradient(135deg, var(--neon-blue) 0%, var(--neon-purple) 100%);
+      position: relative;
+      z-index: 1;
+    }
+    
+    .hero-img::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      background: linear-gradient(135deg, var(--neon-blue), var(--neon-purple));
+      filter: blur(15px);
+      opacity: 0.4;
+      border-radius: 20px;
+      transform: scale(0.98);
+    }
+    
+    .hero-img img {
+      width: 100%;
+      height: auto;
+      object-fit: cover;
+      border-radius: 14px;
+    }
+    
+    /* Features section */
+    .section-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 2.25rem;
+      font-weight: 700;
+      margin-bottom: 48px;
+      text-align: center;
+      color: var(--text-primary);
+      position: relative;
+      display: inline-block;
+      background: linear-gradient(90deg, 
+        #ffffff 0%, 
+        var(--accent-blue) 50%, 
+        var(--accent-purple) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      letter-spacing: -0.5px;
+    }
+    
+    .features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 30px;
+      margin-bottom: 80px;
+    }
+    
+    .feature-card {
+      background-color: rgba(10, 15, 31, 0.5);
+      backdrop-filter: blur(10px);
+      border-radius: 16px;
+      padding: 32px;
+      border: 1px solid rgba(59, 130, 246, 0.1);
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: flex-start;
+      height: 100%;
+      position: relative;
+      overflow: hidden;
+      z-index: 1;
+    }
+    
+    .feature-card::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, 
+        rgba(59, 130, 246, 0.05) 0%, 
+        rgba(139, 92, 246, 0.05) 100%);
+      z-index: -1;
+      opacity: 0;
+      transition: opacity 0.4s ease;
+    }
+    
+    .feature-card:hover {
+      transform: translateY(-5px) scale(1.02);
+      box-shadow: 0 20px 40px -20px var(--border-glow);
+      border-color: rgba(59, 130, 246, 0.3);
+    }
+    
+    .feature-card:hover::before {
+      opacity: 1;
+    }
+    
+    .feature-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 60px;
+      height: 60px;
+      border-radius: 16px;
+      margin-bottom: 24px;
+      background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(139, 92, 246, 0.2));
+      color: var(--accent-blue);
+      font-size: 26px;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .feature-icon::after {
+      content: "";
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+      opacity: 0.1;
+      filter: blur(8px);
+    }
+    
+    .feature-card h3 {
+      font-size: 20px;
+      font-weight: 600;
+      margin-bottom: 12px;
+      color: var(--text-primary);
+      position: relative;
+    }
+    
+    .feature-card p {
+      color: var(--text-secondary);
+      font-size: 14px;
+      line-height: 1.6;
+    }
+    
+    /* Models section */
+    .models-section {
+      margin-bottom: 80px;
+    }
+    
+    .models-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+    }
+    
+    .model-card {
+      background: rgba(10, 15, 31, 0.5);
+      backdrop-filter: blur(10px);
+      border-radius: 14px;
+      padding: 24px;
+      border: 1px solid rgba(59, 130, 246, 0.1);
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .model-card::before {
+      content: "";
+      position: absolute;
+      top: -2px;
+      left: -2px;
+      right: -2px;
+      bottom: -2px;
+      background: linear-gradient(45deg, 
+        var(--accent-blue), 
+        var(--accent-purple), 
+        var(--accent-cyan));
+      z-index: -2;
+      border-radius: 16px;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    
+    .model-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 15px 30px -10px rgba(6, 182, 212, 0.15);
+    }
+    
+    .model-card:hover::before {
+      opacity: 1;
+    }
+    
+    .model-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
+      margin-bottom: 16px;
+      background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(139, 92, 246, 0.2));
+      font-size: 22px;
+    }
+    
+    .model-card h4 {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: var(--text-primary);
+    }
+    
+    .model-card p {
+      color: var(--text-secondary);
+      font-size: 14px;
+      line-height: 1.5;
+    }
+    
+    /* CTA Section */
+    .cta-section {
+      position: relative;
+      padding: 60px 40px;
+      margin-bottom: 80px;
+      background: linear-gradient(135deg, 
+        rgba(59, 130, 246, 0.1) 0%, 
+        rgba(139, 92, 246, 0.1) 100%);
+      border-radius: 20px;
+      border: 1px solid rgba(59, 130, 246, 0.15);
+      overflow: hidden;
+      z-index: 1;
+    }
+    
+    .cta-content {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+    }
+    
+    .cta-section h2 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 16px;
+      color: var(--text-primary);
+    }
+    
+    .cta-section p {
+      font-size: 1.1rem;
+      color: var(--text-secondary);
+      margin-bottom: 32px;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    
+    .cta-button {
+      padding: 12px 30px;
+      font-size: 1rem;
+      border-radius: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      box-shadow: 0 8px 20px rgba(59, 130, 246, 0.3);
+    }
+    
+    .cta-particles {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      z-index: 1;
+    }
+    
+    /* Payment methods section */
+    .payment-section {
+      margin-bottom: 80px;
+    }
+    
+    .payment-methods {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 16px;
+      margin-bottom: 40px;
+    }
+    
+    .payment-method {
+      background-color: var(--bg-card);
+      border-radius: 12px;
+      padding: 20px 24px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      font-size: 15px;
+      font-weight: 500;
+      transition: all 0.3s;
+      flex: 1;
+      min-width: 170px;
+      max-width: 200px;
+      text-align: center;
+    }
+    
+    .payment-method:first-child {
+      border: 1px solid var(--accent-green);
+      background: linear-gradient(to right, rgba(16, 185, 129, 0.1), var(--bg-card));
+    }
+    
+    .payment-method:hover {
+      background-color: rgba(255, 255, 255, 0.03);
+      transform: translateY(-3px);
+    }
+    
+    /* Admin account section */
+    .admin-section {
+      background-color: var(--bg-card);
+      border-radius: 16px;
+      padding: 32px;
+      margin-bottom: 80px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    
+    .admin-section h3 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.5rem;
+      margin-bottom: 20px;
+      color: var(--text-primary);
+    }
+    
+    .admin-details {
+      background-color: rgba(0, 0, 0, 0.2);
+      border-radius: 8px;
+      padding: 20px;
+      font-family: 'Space Mono', monospace;
+      margin-bottom: 20px;
+    }
+    
+    .admin-details p {
+      margin-bottom: 8px;
+      font-size: 14px;
+      display: flex;
+      justify-content: space-between;
+    }
+    
+    .admin-details span.label {
+      color: var(--text-secondary);
+    }
+    
+    .admin-details span.value {
+      color: var(--accent-blue);
+      font-weight: 600;
+    }
+    
+    .warning {
+      color: #f59e0b;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    /* Status section */
+    .status-section {
+      background: linear-gradient(135deg, rgba(59, 130, 246, 0.05), rgba(139, 92, 246, 0.05));
+      border-radius: 16px;
+      padding: 32px;
+      margin-bottom: 80px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    
+    .status-section h3 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.5rem;
+      margin-bottom: 20px;
+      color: var(--text-primary);
+    }
+    
+    .status-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+    
+    .status-item {
+      background-color: var(--bg-card);
+      border-radius: 12px;
+      padding: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    
+    .status-item p {
+      display: flex;
+      align-items: center;
+      color: var(--text-secondary);
+      font-size: 14px;
+    }
+    
+    .status-item p::before {
+      content: "✓";
+      margin-right: 8px;
+      color: var(--accent-green);
+      font-weight: bold;
+    }
+    
+    /* Footer */
+    footer {
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      padding: 32px 0;
+      text-align: center;
+    }
+    
+    footer p {
+      color: var(--text-secondary);
+      font-size: 14px;
+    }
+    
+    /* Responsive */
+    @media (max-width: 768px) {
+      .nav-links {
+        display: none;
+      }
+      
+      .hero-buttons {
+        flex-direction: column;
+        width: 100%;
+      }
+      
+      .hero-buttons .button {
+        width: 100%;
+      }
+      
+      .payment-method {
+        min-width: 140px;
+      }
+    }
+    
+    /* Animations */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .fadeIn {
+      animation: fadeIn 0.6s ease-out forwards;
+    }
+    
+    .delay-1 { animation-delay: 0.1s; }
+    .delay-2 { animation-delay: 0.2s; }
+    .delay-3 { animation-delay: 0.3s; }
+    .delay-4 { animation-delay: 0.4s; }
+  </style>
+</head>
+<body>
+  <header class="container">
+    <div class="logo">OmniDev</div>
+    <nav class="nav-links">
+      <a href="#features">Features</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#models">Models</a>
+    </nav>
+    <div class="auth-buttons">
+      <a href="/login" class="button secondary">Log in</a>
+      <a href="/signup" class="button primary">Sign up</a>
+    </div>
+  </header>
+  
+  <main class="container">
+    <section class="hero">
+      <h1 class="fadeIn" data-text="Self-Improving AI Development Platform">Self-Improving AI Development Platform</h1>
+      <p class="fadeIn delay-1">OmniDev combines advanced AI models with revolutionary auto-error detection and fixing capabilities. Our self-learning system continuously improves to help you code faster, build smarter, and solve complex problems automatically.</p>
+      <div class="hero-buttons fadeIn delay-2">
+        <a href="/signup" class="button primary">Get Started</a>
+        <a href="#features" class="button secondary">Explore Features</a>
+      </div>
+      <div class="hero-img fadeIn delay-3">
+        <img src="https://images.unsplash.com/photo-1607799279861-4dd421887fb3?auto=format&fit=crop&w=1400&q=80" alt="OmniDev Platform Interface">
+      </div>
+    </section>
+    
+    <section id="features">
+      <h2 class="section-title fadeIn">Powerful Features</h2>
+      <div class="features">
+        <div class="feature-card fadeIn">
+          <div class="feature-icon">🔍</div>
+          <h3>Auto-Error Detection & Fixing</h3>
+          <p>Our advanced self-improving AI automatically detects bugs, vulnerabilities, and performance issues in your code, then applies fixes in real-time.</p>
+        </div>
+        <div class="feature-card fadeIn delay-1">
+          <div class="feature-icon">🧠</div>
+          <h3>Multiple AI Models</h3>
+          <p>Access our suite of specialized AI models including OmniDev AutoFix (32B), tailored to different coding tasks from debugging to architecture planning.</p>
+        </div>
+        <div class="feature-card fadeIn delay-1">
+          <div class="feature-icon">📊</div>
+          <h3>Performance Optimization</h3>
+          <p>Receive intelligent suggestions to enhance your application's performance, from algorithm improvements to memory optimization techniques.</p>
+        </div>
+        <div class="feature-card fadeIn delay-2">
+          <div class="feature-icon">📚</div>
+          <h3>Self-Learning System</h3>
+          <p>Our platform continuously learns from user feedback to improve its solutions, building a robust knowledge base of common patterns and fixes.</p>
+        </div>
+        <div class="feature-card fadeIn delay-3">
+          <div class="feature-icon">🌐</div>
+          <h3>Internet Search Integration</h3>
+          <p>Access the latest programming trends and solutions through our built-in search functionality that keeps you up-to-date with best practices.</p>
+        </div>
+        <div class="feature-card fadeIn delay-3">
+          <div class="feature-icon">🔄</div>
+          <h3>GitHub Integration</h3>
+          <p>Seamlessly connect with your GitHub repositories. Clone, commit, and push changes without leaving your development environment.</p>
+        </div>
+        <div class="feature-card fadeIn delay-4">
+          <div class="feature-icon">💰</div>
+          <h3>Flexible Subscriptions</h3>
+          <p>Choose from various subscription plans with granular AI feature access. Our multiple payment options make upgrading accessible worldwide.</p>
+        </div>
+        <div class="feature-card fadeIn delay-4">
+          <div class="feature-icon">🔐</div>
+          <h3>Enterprise Security</h3>
+          <p>Rest easy with enterprise-grade security features including encryption, access controls, and compliance with industry standards.</p>
+        </div>
+      </div>
+    </section>
+    
+    <!-- Payment section removed as per client's request - will only be shown on subscription page -->
+    
+    <section id="models" class="models-section fadeIn">
+      <h2 class="section-title">Powered by Advanced AI Models</h2>
+      <div class="models-grid">
+        <div class="model-card">
+          <div class="model-icon">🛠️</div>
+          <h4>OmniDev AutoFix (32B)</h4>
+          <p>Self-improving model with automatic error detection and performance optimization capabilities</p>
+        </div>
+        <div class="model-card">
+          <div class="model-icon">🧪</div>
+          <h4>StarCoder (15.5B)</h4>
+          <p>Exceptional for code generation across 80+ programming languages with 1T token training</p>
+        </div>
+        <div class="model-card">
+          <div class="model-icon">🔬</div>
+          <h4>CodeGen (16B)</h4>
+          <p>Optimized for program synthesis and complex algorithm implementation</p>
+        </div>
+        <div class="model-card">
+          <div class="model-icon">🏗️</div>
+          <h4>WizardCoder (34B)</h4>
+          <p>Expert in architectural planning, system design and complex infrastructure</p>
+        </div>
+        <div class="model-card">
+          <div class="model-icon">⚡</div>
+          <h4>DeepSeek (7B)</h4>
+          <p>Lightweight model for quick code assistance and rapid development</p>
+        </div>
+        <div class="model-card">
+          <div class="model-icon">🔍</div>
+          <h4>CodeLlama (70B)</h4>
+          <p>Our most powerful model for complex refactoring and advanced optimization</p>
+        </div>
+      </div>
+    </section>
+    
+    <section id="pricing" class="cta-section fadeIn">
+      <div class="cta-content">
+        <h2>Ready to experience the future of AI development?</h2>
+        <p>Join thousands of developers using OmniDev's self-improving AI systems to eliminate bugs automatically, optimize performance, and build better software faster than ever before.</p>
+        <a href="/subscription" class="button primary cta-button">View Pricing Plans</a>
+      </div>
+      <div class="cta-particles" id="particles-js"></div>
+    </section>
+  </main>
+  
+  <footer class="container">
+    <p>© 2025 OmniDev. All rights reserved.</p>
+  </footer>
+
+  <script>
+    // Simple particle animation for CTA section
+    function createParticles() {
+      const particlesContainer = document.getElementById('particles-js');
+      if (!particlesContainer) return;
+      
+      const numParticles = 20;
+      
+      for (let i = 0; i < numParticles; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'particle';
+        
+        // Random size between 1-3px
+        const size = Math.random() * 2 + 1;
+        
+        // Random position
+        const left = Math.random() * 100;
+        const top = Math.random() * 100;
+        
+        // Random movement duration between 10-25s
+        const duration = Math.random() * 15 + 10;
+        
+        // Random delay
+        const delay = Math.random() * 10;
+        
+        // Random opacity
+        const opacity = Math.random() * 0.5 + 0.2;
+        
+        // Apply styles
+        particle.style.cssText = `
+          position: absolute;
+          width: ${size}px;
+          height: ${size}px;
+          background: white;
+          border-radius: 50%;
+          left: ${left}%;
+          top: ${top}%;
+          opacity: ${opacity};
+          animation: float ${duration}s ease-in-out ${delay}s infinite;
+        `;
+        
+        particlesContainer.appendChild(particle);
+      }
+    }
+    
+    // Add keyframe animation
+    const style = document.createElement('style');
+    style.innerHTML = `
+      @keyframes float {
+        0% { transform: translateY(0) translateX(0); }
+        25% { transform: translateY(-20px) translateX(10px); }
+        50% { transform: translateY(-40px) translateX(-5px); }
+        75% { transform: translateY(-20px) translateX(-10px); }
+        100% { transform: translateY(0) translateX(0); }
+      }
+      
+      .particle {
+        pointer-events: none;
+      }
+    `;
+    document.head.appendChild(style);
+    
+    // Initialize particles
+    document.addEventListener('DOMContentLoaded', function() {
+      createParticles();
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,60 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    container_name: omnidev-app
+    ports:
+      - "5000:5000"
+    environment:
+      - NODE_ENV=production
+      - DATABASE_URL=postgres://postgres:omnidev_password@db:5432/omnidev
+      - SESSION_SECRET=omnidev_session_secret
+    depends_on:
+      - db
+    restart: unless-stopped
+    networks:
+      - omnidev-network
+
+  db:
+    image: postgres:15-alpine
+    container_name: omnidev-db
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=omnidev_password
+      - POSTGRES_DB=omnidev
+    volumes:
+      - omnidev_pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - omnidev-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  nginx:
+    image: nginx:alpine
+    container_name: omnidev-nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d
+      - ./nginx/ssl:/etc/nginx/ssl
+      - ./nginx/www:/var/www/html
+    depends_on:
+      - app
+    networks:
+      - omnidev-network
+    restart: unless-stopped
+
+networks:
+  omnidev-network:
+    driver: bridge
+
+volumes:
+  omnidev_pgdata:
+    driver: local
